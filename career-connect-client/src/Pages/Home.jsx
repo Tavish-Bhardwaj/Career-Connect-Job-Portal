@@ -71,10 +71,12 @@ setCurrentPage(currentPage+1);
     // category filtering
     if(selected){ 
      
-      filterJobs = filterJobs.filter(({jobLocation, maxPrice,  salaryType, employmentType, })=>(
+      filterJobs = filterJobs.filter(({jobLocation, maxPrice,  salaryType, employmentType, postingDate, experienceLevel})=>(
 
            jobLocation.toLowerCase() === selected.toLowerCase() ||
-          parseInt(maxPrice)=== parseInt(selected) ||
+          parseInt(maxPrice)<= parseInt(selected) ||
+          postingDate >= selected ||
+          experienceLevel.toLowerCase() === selected.toLowerCase() ||
           salaryType.toLowerCase()===selected.toLowerCase() ||
           employmentType.toLowerCase()=== selected.toLowerCase() 
       ));
