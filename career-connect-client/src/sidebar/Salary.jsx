@@ -5,7 +5,7 @@ const Salary = ({ handleChange, handleClick }) => {
   return (
     <div>
       <h4 className="text-lg font-medium mb-2">Salary</h4>
-      <div>
+      <div className="mb-2">
         <Button onClickHandler={handleClick} value="" title="Hourly" />
         <Button onClickHandler={handleClick} value="Monthly" title="Monthly" />
         <Button onClickHandler={handleClick} value="Yearly" title="Yearly" />

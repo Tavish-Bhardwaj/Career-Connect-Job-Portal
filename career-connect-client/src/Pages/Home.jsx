@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Card from '../components/Card';
 import Jobs from './Jobs';
 import Sidebar from '../sidebar/Sidebar';
+import Newsletter from '../components/Newsletter';
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -119,7 +120,7 @@ filterJobs= filterJobs.slice(startIndex, endIndex);
         
 
         {/* job card right side */}
-        <div className='bg-white p-4 rounded'>Right</div>
+        <div className='bg-white p-4 rounded'><Newsletter /></div>
       </div>
     </div>
   )
