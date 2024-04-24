@@ -15,11 +15,15 @@ const [currentPage, setCurrentPage]=useState(1);
 const itemsPerPage=6;
   useEffect(() => {
     setIsLoading(true);
-    fetch("jobs.json").then(res=>res.json()).then(data=>{
+    fetch("http://localhost:5000/all-jobs").then(res=>res.json()).then(data=>{
    
       setJobs(data);
       setIsLoading(false);
     })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    });
   },[])
   
   const [query, setQuery] = useState("");
