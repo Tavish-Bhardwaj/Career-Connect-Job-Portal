@@ -31,7 +31,9 @@ const itemsPerPage=6;
       setQuery(e.target.value);
   }
   // filter jobs by title
-  const filteredItems = jobs.filter((job) =>  job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !==-1);
+  // const filteredItems = jobs.filter((job) =>  job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !==-1);
+  // const filteredItems = jobs.filter((job) =>  job.jobTitle && job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !==-1);
+  const filteredItems = jobs.filter((job) => (job.jobTitle && job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1));
 
   
 
@@ -66,32 +68,72 @@ setCurrentPage(currentPage+1);
       setCurrentPage(currentPage-1);
     }
   }
-  // main function
-  const filterData=(jobs, selected, query)=>{
-    let filterJobs=jobs;
-    if(query){
-      filterJobs=filteredItems;
-    }
+//   // main function
+//   const filterData=(jobs, selected, query)=>{
+//     let filterJobs=jobs;
+//     if(query){
+//       filterJobs=filteredItems;
+//     }
     
-    // category filtering
-    if(selected){ 
+//     // category filtering
+//     if(selected){ 
      
-      filterJobs = filterJobs.filter(({jobLocation, maxPrice,  salaryType, employmentType, postingDate, experienceLevel})=>(
+//       filterJobs = filterJobs.filter(({jobLocation, maxPrice,  salaryType, employmentType, postingDate, experienceLevel})=>(
 
-           jobLocation.toLowerCase() === selected.toLowerCase() ||
-          parseInt(maxPrice)<= parseInt(selected) ||
-          postingDate >= selected ||
-          experienceLevel.toLowerCase() === selected.toLowerCase() ||
-          salaryType.toLowerCase()===selected.toLowerCase() ||
-          employmentType.toLowerCase()=== selected.toLowerCase() 
-      ));
+//            jobLocation.toLowerCase() === selected.toLowerCase() ||
+//           parseInt(maxPrice)<= parseInt(selected) ||
+//           postingDate >= selected ||
+//           experienceLevel.toLowerCase() === selected.toLowerCase() ||
+//           salaryType.toLowerCase()===selected.toLowerCase() ||
+//           employmentType.toLowerCase()=== selected.toLowerCase() 
+//       ));
      
-    }
-// slice the data based on current page
-const {startIndex,endIndex}= calculatePageRange();
-filterJobs= filterJobs.slice(startIndex, endIndex);
-    return filterJobs.map((data, i)=>  <Card key={i} data={data} />)
+//     }
+// // slice the data based on current page
+// const {startIndex,endIndex}= calculatePageRange();
+// filterJobs= filterJobs.slice(startIndex, endIndex);
+//     return filterJobs.map((data, i)=>  <Card key={i} data={data} />)
+//   }
+
+const filterData = (jobs, selected, query) => {
+  let filterJobs = jobs;
+
+  if (query) {
+    filterJobs = filterJobs.filter((job) => job.jobTitle && job.jobTitle.toLowerCase().includes(query.toLowerCase()));
   }
+
+  if (selected) {
+    filterJobs = filterJobs.filter(({ jobLocation, maxPrice, salaryType, employmentType, postingDate, experienceLevel }) => {
+      // Check if jobLocation is defined before calling toLowerCase()
+      const locationMatch = jobLocation && jobLocation.toLowerCase() === selected.toLowerCase();
+
+      // Check if maxPrice is defined and parseable before comparing
+      const priceMatch = maxPrice && parseInt(maxPrice) <= parseInt(selected);
+
+      // Check if postingDate is defined before comparing
+      const dateMatch = postingDate && postingDate >= selected;
+
+      // Check if experienceLevel is defined before calling toLowerCase()
+      const experienceMatch = experienceLevel && experienceLevel.toLowerCase() === selected.toLowerCase();
+
+      // Check if salaryType is defined before calling toLowerCase()
+      const salaryMatch = salaryType && salaryType.toLowerCase() === selected.toLowerCase();
+
+      // Check if employmentType is defined before calling toLowerCase()
+      const employmentMatch = employmentType && employmentType.toLowerCase() === selected.toLowerCase();
+
+      // Return true if any of the conditions match
+      return locationMatch || priceMatch || dateMatch || experienceMatch || salaryMatch || employmentMatch;
+    });
+  }
+
+  // slice the data based on current page
+  const { startIndex, endIndex } = calculatePageRange();
+  filterJobs = filterJobs.slice(startIndex, endIndex);
+
+  return filterJobs.map((data, i) => <Card key={i} data={data} />);
+};
+
    const result = filterData(jobs, selectedCategory, query);
   return (
     <div>
