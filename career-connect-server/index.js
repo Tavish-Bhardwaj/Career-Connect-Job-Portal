@@ -70,10 +70,15 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+// const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const bodyparser = require('body-parser');
+const User = require('./models/User');
 const port = process.env.PORT || 5000;
 require("dotenv").config();
 const { MongoClient, ServerApiVersion,ObjectId } = require("mongodb");
-
+app.use(bodyparser.json());
 app.use(express.json());
 app.use(cors());
 
@@ -115,6 +120,50 @@ async function main() {
       }
     });
 
+// 
+
+app.get("/server-check", async(req,res)=>{
+  res.send("Server is up and running");
+
+})
+app.post("/login",async(req,res)=>{
+  
+      const {email,password}=req.body;
+      // console.log(email,password);
+
+       const result=await User.findOne({email:email,password:password});
+      //  console.log(result);
+
+       if(result){
+              // req.session.logedin=req.body;
+console.log("Logged In")
+              res.json("true");
+           }
+           else{
+            console.log("Not Logged In")
+                  res.json("false");
+               }
+
+
+})
+  
+
+app.post("/signup",async(req,res)=>{
+const {name,email,password}=req.body;
+console.log(name,email, password);
+let result=await User.findOne({name:name,email:email,password:password});
+console.log(result);
+if(result){
+res.send("result");
+}
+else{
+const newUser=model.create(req.body).then(()=>{
+res.json("created");
+}).catch((e)=>{
+console.log(e);
+})
+}
+})
 
     // get single job using id
     app.get("/all-jobs/:id", async(req,res)=> {

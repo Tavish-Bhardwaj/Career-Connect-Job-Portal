@@ -1,4 +1,6 @@
-// 
+
+
+
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -12,7 +14,10 @@ const JobDetails = () => {
     useEffect(() => {
         fetch(`http://localhost:5000/all-jobs/${id}`)
             .then(res => res.json())
-            .then(data => setJob(data))
+            .then(data => {
+                console.log('Fetched job details:', data);
+                setJob(data);
+            })
             .catch(err => console.error('Error fetching job details:', err));
     }, [id]);
 
@@ -61,7 +66,7 @@ const JobDetails = () => {
                     {job.skills && job.skills.length > 0 ? (
                         <ul className="list-disc list-inside">
                             {job.skills.map((skill, index) => (
-                                <li key={index}>{skill}</li>
+                                <li key={index}>{typeof skill === 'object' ? JSON.stringify(skill) : skill}</li>
                             ))}
                         </ul>
                     ) : (
